@@ -1,0 +1,342 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA0000000000000000000001 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000001 /* main.c */; };
+		AA0000000000000000000002 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000002 /* aes.c */; };
+		AA0000000000000000000003 /* cnmt.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000003 /* cnmt.c */; };
+		AA0000000000000000000004 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000004 /* ConvertUTF.c */; };
+		AA0000000000000000000005 /* extkeys.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000005 /* extkeys.c */; };
+		AA0000000000000000000006 /* filepath.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000006 /* filepath.c */; };
+		AA0000000000000000000007 /* getopt.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000007 /* getopt.c */; };
+		AA0000000000000000000008 /* hfs0.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000008 /* hfs0.c */; };
+		AA0000000000000000000009 /* nca.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000009 /* nca.c */; };
+		AA000000000000000000000A /* nsp.c in Sources */ = {isa = PBXBuildFile; fileRef = BB000000000000000000000A /* nsp.c */; };
+		AA000000000000000000000B /* pki.c in Sources */ = {isa = PBXBuildFile; fileRef = BB000000000000000000000B /* pki.c */; };
+		AA000000000000000000000C /* romfs.c in Sources */ = {isa = PBXBuildFile; fileRef = BB000000000000000000000C /* romfs.c */; };
+		AA000000000000000000000D /* sha.c in Sources */ = {isa = PBXBuildFile; fileRef = BB000000000000000000000D /* sha.c */; };
+		AA000000000000000000000E /* threadpool.c in Sources */ = {isa = PBXBuildFile; fileRef = BB000000000000000000000E /* threadpool.c */; };
+		AA000000000000000000000F /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = BB000000000000000000000F /* utils.c */; };
+		AA0000000000000000000010 /* xci.c in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000010 /* xci.c */; };
+		AA0000000000000000000011 /* libmbedtls.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000011 /* libmbedtls.a */; };
+		AA0000000000000000000012 /* libmbedx509.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000012 /* libmbedx509.a */; };
+		AA0000000000000000000013 /* libmbedcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000013 /* libmbedcrypto.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BB0000000000000000000001 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = src/main.c; sourceTree = "<group>"; };
+		BB0000000000000000000002 /* aes.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = aes.c; path = src/aes.c; sourceTree = "<group>"; };
+		BB0000000000000000000003 /* cnmt.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = cnmt.c; path = src/cnmt.c; sourceTree = "<group>"; };
+		BB0000000000000000000004 /* ConvertUTF.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = ConvertUTF.c; path = src/ConvertUTF.c; sourceTree = "<group>"; };
+		BB0000000000000000000005 /* extkeys.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = extkeys.c; path = src/extkeys.c; sourceTree = "<group>"; };
+		BB0000000000000000000006 /* filepath.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = filepath.c; path = src/filepath.c; sourceTree = "<group>"; };
+		BB0000000000000000000007 /* getopt.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = getopt.c; path = src/getopt.c; sourceTree = "<group>"; };
+		BB0000000000000000000008 /* hfs0.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = hfs0.c; path = src/hfs0.c; sourceTree = "<group>"; };
+		BB0000000000000000000009 /* nca.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = nca.c; path = src/nca.c; sourceTree = "<group>"; };
+		BB000000000000000000000A /* nsp.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = nsp.c; path = src/nsp.c; sourceTree = "<group>"; };
+		BB000000000000000000000B /* pki.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pki.c; path = src/pki.c; sourceTree = "<group>"; };
+		BB000000000000000000000C /* romfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = romfs.c; path = src/romfs.c; sourceTree = "<group>"; };
+		BB000000000000000000000D /* sha.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = sha.c; path = src/sha.c; sourceTree = "<group>"; };
+		BB000000000000000000000E /* threadpool.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = threadpool.c; path = src/threadpool.c; sourceTree = "<group>"; };
+		BB000000000000000000000F /* utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = utils.c; path = src/utils.c; sourceTree = "<group>"; };
+		BB0000000000000000000010 /* xci.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xci.c; path = src/xci.c; sourceTree = "<group>"; };
+		BB0000000000000000000011 /* libmbedtls.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmbedtls.a; path = mbedtls/library/libmbedtls.a; sourceTree = "<group>"; };
+		BB0000000000000000000012 /* libmbedx509.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmbedx509.a; path = mbedtls/library/libmbedx509.a; sourceTree = "<group>"; };
+		BB0000000000000000000013 /* libmbedcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmbedcrypto.a; path = mbedtls/library/libmbedcrypto.a; sourceTree = "<group>"; };
+		CC0000000000000000000001 /* 4nxci */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 4nxci; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DD0000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0000000000000000000011 /* libmbedtls.a in Frameworks */,
+				AA0000000000000000000012 /* libmbedx509.a in Frameworks */,
+				AA0000000000000000000013 /* libmbedcrypto.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EE0000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				EE0000000000000000000002 /* src */,
+				EE0000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EE0000000000000000000002 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				BB0000000000000000000001 /* main.c */,
+				BB0000000000000000000002 /* aes.c */,
+				BB0000000000000000000003 /* cnmt.c */,
+				BB0000000000000000000004 /* ConvertUTF.c */,
+				BB0000000000000000000005 /* extkeys.c */,
+				BB0000000000000000000006 /* filepath.c */,
+				BB0000000000000000000007 /* getopt.c */,
+				BB0000000000000000000008 /* hfs0.c */,
+				BB0000000000000000000009 /* nca.c */,
+				BB000000000000000000000A /* nsp.c */,
+				BB000000000000000000000B /* pki.c */,
+				BB000000000000000000000C /* romfs.c */,
+				BB000000000000000000000D /* sha.c */,
+				BB000000000000000000000E /* threadpool.c */,
+				BB000000000000000000000F /* utils.c */,
+				BB0000000000000000000010 /* xci.c */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		EE0000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CC0000000000000000000001 /* 4nxci */,
+				BB0000000000000000000011 /* libmbedtls.a */,
+				BB0000000000000000000012 /* libmbedx509.a */,
+				BB0000000000000000000013 /* libmbedcrypto.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FF0000000000000000000001 /* 4nxci */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF0000000000000000000010 /* Build configuration list for PBXNativeTarget "4nxci" */;
+			buildPhases = (
+				FF0000000000000000000002 /* Sources */,
+				FF0000000000000000000003 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = 4nxci;
+			productName = 4nxci;
+			productReference = CC0000000000000000000001 /* 4nxci */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FF0000000000000000000004 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = FF0000000000000000000005 /* Build configuration list for PBXProject "4nxci" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EE0000000000000000000001;
+			productRefGroup = EE0000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FF0000000000000000000001 /* 4nxci */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FF0000000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0000000000000000000001 /* main.c in Sources */,
+				AA0000000000000000000002 /* aes.c in Sources */,
+				AA0000000000000000000003 /* cnmt.c in Sources */,
+				AA0000000000000000000004 /* ConvertUTF.c in Sources */,
+				AA0000000000000000000005 /* extkeys.c in Sources */,
+				AA0000000000000000000006 /* filepath.c in Sources */,
+				AA0000000000000000000007 /* getopt.c in Sources */,
+				AA0000000000000000000008 /* hfs0.c in Sources */,
+				AA0000000000000000000009 /* nca.c in Sources */,
+				AA000000000000000000000A /* nsp.c in Sources */,
+				AA000000000000000000000B /* pki.c in Sources */,
+				AA000000000000000000000C /* romfs.c in Sources */,
+				AA000000000000000000000D /* sha.c in Sources */,
+				AA000000000000000000000E /* threadpool.c in Sources */,
+				AA000000000000000000000F /* utils.c in Sources */,
+				AA0000000000000000000010 /* xci.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		FF00000000000000000000010 /* Build configuration list for PBXNativeTarget "4nxci" */ = {
+			isa = XCBuildConfigurationList;
+			buildConfigurations = (
+				FF00000000000000000000011 /* Debug */,
+				FF00000000000000000000012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF00000000000000000000011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"_FILE_OFFSET_BITS=64",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/include",
+					"$(PROJECT_DIR)/mbedtls/include",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				PRODUCT_NAME = 4nxci;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FF00000000000000000000012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_FILE_OFFSET_BITS=64",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/include",
+					"$(PROJECT_DIR)/mbedtls/include",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = 4nxci;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		FF0000000000000000000005 /* Build configuration list for PBXProject "4nxci" */ = {
+			isa = XCBuildConfigurationList;
+			buildConfigurations = (
+				FF00000000000000000000013 /* Debug */,
+				FF00000000000000000000014 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF00000000000000000000013 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_OUT_OF_RANGE_ASSIGNMENTS = YES;
+				CLANG_WARN_PROTOTYPE_CONVENTION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FF00000000000000000000014 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_OUT_OF_RANGE_ASSIGNMENTS = YES;
+				CLANG_WARN_PROTOTYPE_CONVENTION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+/* End XCConfigurationList section */
+	};
+	rootObject = FF0000000000000000000004 /* Project object */;
+}

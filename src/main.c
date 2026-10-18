@@ -5,7 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <time.h>
+#include <unistd.h>
+#if defined(__APPLE__)
+#include <sys/sysctl.h>
+#endif
 #include "cnmt.h"
 #include "nca.h"
 #include "nsp.h"
@@ -94,9 +99,18 @@ static void ensure_titledb(void)
         remove(tmp_path);
     }
 #else
-    fprintf(stderr, "Warning: Auto-download is Windows-only.\n");
-    fprintf(stderr, "         Download %s manually from:\n  %s\n",
-            TITLEDB_FILENAME, TITLEDB_URL);
+    /* POSIX: try to download with curl */
+    printf("[*] Title DB not found. Downloading...\n");
+    char dlcmd[1024];
+    snprintf(dlcmd, sizeof(dlcmd), "curl -sL -o \"%s\" \"%s\"", TITLEDB_FILENAME, TITLEDB_URL);
+    int ret = system(dlcmd);
+    if (ret != 0) {
+        printf("[-] Download failed (curl exit code %d). Please download manually:\n", ret);
+        printf("    %s\n", TITLEDB_URL);
+        printf("    Place it at: %s\n", TITLEDB_FILENAME);
+    } else {
+        printf("[+] Downloaded title DB.\n");
+    }
 #endif
 }
 
@@ -762,7 +776,32 @@ static int move_file_robust(const char *old_path, const char *new_path)
 
     return -1;
 }
+#endif
+#if defined(__APPLE__) || defined(__unix__) || defined(__unix)
+static unsigned long long get_available_memory(void) {
+#if defined(__APPLE__)
+    int mib[2] = { CTL_HW, HW_MEMSIZE };
+    unsigned int memsize = 0;
+    size_t len = sizeof(memsize);
+    if (sysctl(mib, 2, &memsize, &len, NULL, 0) != 0) return 0;
+    return (unsigned long long)memsize;
 #else
+    long pages = sysconf(_SC_PHYS_PAGES);
+    long page_size = sysconf(_SC_PAGE_SIZE);
+    if (pages < 0 || page_size < 0) return 0;
+    return (unsigned long long)pages * (unsigned long long)page_size;
+#endif
+}
+
+static unsigned long long get_file_size(const char *path) {
+    FILE *f = fopen(path, "rb");
+    if (!f) return 0;
+    fseeko(f, 0, SEEK_END);
+    unsigned long long size = (unsigned long long)ftello(f);
+    fclose(f);
+    return size;
+}
+
 static int move_file_robust(const char *old_path, const char *new_path)
 {
     return rename(old_path, new_path);
@@ -976,16 +1015,20 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
     // Check file size and available memory
+#if defined(_WIN32)
     uint64_t xci_file_size = get_file_size(tool_ctx.file);
-    uint64_t available_mem = get_available_memory();
+#else
+    uint64_t xci_file_size = get_file_size(input_name);
+#endif
+    unsigned long long total_mem = get_available_memory();
 
     printf("\nXCI File Size: %.2f GB\n", xci_file_size / (1024.0 * 1024.0 * 1024.0));
-    printf("Available RAM: %.2f GB\n", available_mem / (1024.0 * 1024.0 * 1024.0));
+    printf("Total RAM: %.2f GB\n", total_mem / (1024.0 * 1024.0 * 1024.0));
 
     // If we have enough RAM (file size + 4GB headroom), suggest loading to RAM
-    if (available_mem > xci_file_size + (4ULL * 1024 * 1024 * 1024))
+    if (total_mem > xci_file_size + (4ULL * 1024 * 1024 * 1024))
     {
         printf("Note: Sufficient RAM available for optimal performance\n");
     }
@@ -1019,11 +1062,16 @@ int main(int argc, char **argv)
     application_nsps = (nsp_ctx_t *)calloc(1, sizeof(nsp_ctx_t) * applications_cnmt_ctx.count);
     printf("===> Processing %u Application(s):\n", applications_cnmt_ctx.count);
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
     // Get number of CPU cores for parallel processing
+#if defined(_WIN32)
     SYSTEM_INFO sysinfo;
     GetSystemInfo(&sysinfo);
     int num_cores = sysinfo.dwNumberOfProcessors;
+#else
+    int num_cores = (int)sysconf(_SC_NPROCESSORS_ONLN);
+    if (num_cores < 1) num_cores = 1;
+#endif
     printf("System has %d CPU cores - enabling parallel processing\n", num_cores);
 
     // Create thread pool with number of cores (or half if very large XCI)

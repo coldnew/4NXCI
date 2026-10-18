@@ -4,6 +4,26 @@ This project is based on the work of [4NXCI](https://github.com/tiliarou/4NXCI) 
 
 A modernized version for Visual Studio 2026 with performance improvements and updated dependencies.
 
+## Building on macOS
+
+### Prerequisites
+- Xcode Command Line Tools (`xcode-select --install`)
+- GNU Make
+
+### Build Steps
+```bash
+# 1. Create config.mk from template
+cp config.mk.template config.mk
+
+# 2. Build
+make
+
+# 3. (Optional) Open in Xcode
+open 4nxci.xcodeproj
+```
+
+The resulting `4nxci` binary will be a native Mach-O executable (arm64/x86_64).
+
 **Note:** This tool processes individual XCI files. To process an entire folder of XCI files, use [ConvertXciToNsp](https://github.com/tetj/ConvertXciToNsp) which provides batch processing functionality.
 
 ## Improvements

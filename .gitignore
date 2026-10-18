@@ -367,3 +367,19 @@ FodyWeavers.xsd
 titles.us.en.json
 US.en.json
 *.titledb.json
+
+# Build artifacts
+*.o
+4nxci
+config.mk
+
+# Encryption keys
+prod.keys
+keys.dat
+keys.txt
+keys.ini
+
+# macOS Xcode
+xcuserdata/
+*.xcuserstate
+4nxci.xcodeproj/xcuserdata/
