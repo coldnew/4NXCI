@@ -1,0 +1,51 @@
+name: Build macOS ARM64
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-macos-arm64:
+    name: Build for Apple Silicon (arm64)
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup build environment
+        run: |
+          xcode-select --switch /Applications/Xcode.app 2>/dev/null || true
+          sudo xcode-select --reset 2>/dev/null || true
+          brew install make 2>/dev/null || true
+          echo "=== Build tools ==="
+          uname -m
+          sw_vers
+          make --version | head -1
+          clang --version | head -1
+
+      - name: Prepare config
+        run: cp config.mk.template config.mk
+
+      - name: Build 4nxci
+        run: |
+          make clean 2>/dev/null || true
+          make -j$(sysctl -n hw.ncpu)
+          ls -la 4nxci
+          file 4nxci
+
+      - name: Smoke test
+        run: ./4nxci --help 2>&1 | head -5
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 4nxci-macos-arm64
+          path: 4nxci
+          if-no-files-found: error
