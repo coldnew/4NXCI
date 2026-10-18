@@ -12,5 +12,6 @@
 
 void pki_derive_keys(nca_keyset_t *keyset);
 void pki_initialize_keyset(nca_keyset_t *keyset);
+void generate_kek(unsigned char *dst, const unsigned char *src, const unsigned char *master_key, const unsigned char *kek_seed, const unsigned char *key_seed);
 
 #endif

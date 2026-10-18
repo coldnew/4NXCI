@@ -174,10 +174,26 @@ static char hextoi(char c)
 
 void parse_hex_key(unsigned char *key, const char *hex, unsigned int len)
 {
-    if (strlen(hex) != 2 * len)
+    size_t hex_len = strlen(hex);
+
+    /* Strip trailing whitespace and non-hex characters */
+    while (hex_len > 0 && !ishex(hex[hex_len - 1]))
+        hex_len--;
+
+    /* If key is too long, truncate from the left (keep rightmost 2*len chars).
+     * Some prod.keys files have extra leading bytes in newer key formats. */
+    if (hex_len > 2 * len)
     {
-        fprintf(stderr, "Key (%s) must be %" PRIu32 " hex digits!\n", hex, 2 * len);
-        exit(EXIT_FAILURE);
+        hex += (hex_len - 2 * len);
+        hex_len = 2 * len;
+    }
+
+    /* Left-pad short keys with zeros (newer key formats may be shorter) */
+    char padded[65] = {0};
+    if (hex_len < 2 * len) {
+        memset(padded, '0', 2 * len - hex_len);
+        strcpy(padded + (2 * len - hex_len), hex);
+        hex = padded;
     }
 
     for (unsigned int i = 0; i < 2 * len; i++)
@@ -311,14 +327,39 @@ void extkeys_initialize_keyset(nca_keyset_t *keyset, FILE *f)
                 parse_hex_key(keyset->tsec_key, value, sizeof(keyset->tsec_key));
                 matched_key = 1;
             }
-            else if (strcmp(key, "tsec_root_key") == 0 || strcmp(key, "tsec_root_key_00") == 0)
+            else if (strcmp(key, "tsec_root_key") == 0 || strncmp(key, "tsec_root_key_", 14) == 0)
             {
-                parse_hex_key(keyset->tsec_root_key, value, sizeof(keyset->tsec_root_key));
-                matched_key = 1;
+                unsigned int index = 0;
+                if (strcmp(key, "tsec_root_key") == 0)
+                {
+                    index = 0;
+                }
+                else
+                {
+                    index = strtoul(key + 14, NULL, 16);
+                }
+                if (index < 0x20)
+                {
+                    parse_hex_key(keyset->tsec_root_keys[index], value, sizeof(keyset->tsec_root_keys[index]));
+                    if (index == 0)
+                    {
+                        memcpy(keyset->tsec_root_key, keyset->tsec_root_keys[0], 0x10);
+                    }
+                    matched_key = 1;
+                }
             }
             else if (strcmp(key, "beta_nca0_exponent") == 0)
             {
                 matched_key = 1;
+            }
+            else if (strncmp(key, "mariko_master_kek_source_", 24) == 0)
+            {
+                unsigned int index = strtoul(key + 24, NULL, 16);
+                if (index < 0x20)
+                {
+                    parse_hex_key(keyset->master_kek_sources[index], value, sizeof(keyset->master_kek_sources[index]));
+                    matched_key = 1;
+                }
             }
             else
             {
@@ -445,7 +486,26 @@ void extkeys_initialize_keyset(nca_keyset_t *keyset, FILE *f)
             }
             if (!matched_key)
             {
-                fprintf(stderr, "[WARN]: Failed to match key \"%s\", (value \"%s\")\n", key, value);
+                /* Suppress warnings for keys not relevant to XCI/NCA conversion */
+                static const char *ignored_keys[] = {
+                    "bis_kek_source", "bis_key_source_00", "bis_key_source_01", "bis_key_source_02",
+                    "device_key", "device_key_4x", "eticket_rsa_kek", "eticket_rsa_kek_source",
+                    "eticket_rsa_kekek_source", "eticket_rsa_keypair", "per_console_key_source",
+                    "retail_specific_aes_key_source", "save_mac_key", "save_mac_sd_card_kek_source",
+                    "save_mac_sd_card_key_source", "sd_card_custom_storage_key_source", "sd_seed",
+                    "ssl_rsa_kek", "ssl_rsa_kek_source", "ssl_rsa_kekek_source", "ssl_rsa_key",
+                    NULL
+                };
+                int should_ignore = 0;
+                for (int idx = 0; ignored_keys[idx] != NULL; idx++) {
+                    if (strcmp(key, ignored_keys[idx]) == 0) {
+                        should_ignore = 1;
+                        break;
+                    }
+                }
+                if (!should_ignore) {
+                    fprintf(stderr, "[WARN]: Failed to match key \"%s\"\n", key);
+                }
             }
         }
     }

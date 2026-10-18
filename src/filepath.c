@@ -85,7 +85,8 @@ void filepath_append(filepath_t *fpath, const char *format, ...) {
     vsnprintf(tmppath, sizeof(tmppath), format, args);
     va_end(args);
 
-    strcat(fpath->char_path, OS_PATH_SEPARATOR);
+    if (strlen(fpath->char_path) > 0)
+        strcat(fpath->char_path, OS_PATH_SEPARATOR);
     strcat(fpath->char_path, tmppath);
     filepath_update(fpath);
 }
@@ -103,7 +104,8 @@ void filepath_append_n(filepath_t *fpath, uint32_t n, const char *format, ...) {
     vsnprintf(tmppath, sizeof(tmppath), format, args);
     va_end(args);
 
-    strcat(fpath->char_path, OS_PATH_SEPARATOR);
+    if (strlen(fpath->char_path) > 0)
+        strcat(fpath->char_path, OS_PATH_SEPARATOR);
     strncat(fpath->char_path, tmppath, n);
     filepath_update(fpath);
 }

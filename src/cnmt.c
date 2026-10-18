@@ -101,6 +101,13 @@ void cnmt_gamecard_process(nxci_ctx_t *tool, cnmt_xml_ctx_t *cnmt_xml_ctx, cnmt_
         filename = (char *)calloc(1, 37);
         hexBinaryString(cnmt_ctx->cnmt_content_records[index].ncaid, 16, filename, 33);
         strcat(filename, ".nca");
+
+        // Ensure secure_dir_path is set (may have been cleared between extraction and processing)
+        if (nca_ctx.tool_ctx->settings.secure_dir_path.char_path[0] == '\0')
+        {
+            filepath_set(&nca_ctx.tool_ctx->settings.secure_dir_path, "4nxci_extracted_xci");
+            os_makedir(nca_ctx.tool_ctx->settings.secure_dir_path.os_path);
+        }
         filepath_copy(&filepath, &nca_ctx.tool_ctx->settings.secure_dir_path);
         filepath_append(&filepath, "%s", filename);
 

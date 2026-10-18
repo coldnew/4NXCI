@@ -100,3 +100,7 @@ void xci_save(xci_ctx_t *ctx) {
 	}
 	printf("\n");
 }
+
+void xci_create_secure_dir(xci_ctx_t *ctx) {
+    os_makedir(ctx->tool_ctx->settings.secure_dir_path.os_path);
+}

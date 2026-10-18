@@ -355,6 +355,9 @@ void nca_control_nacp_process(nca_ctx_t *ctx, nsp_ctx_t *nsp_ctx)
     filepath_append(&control_romfs_path, "%016" PRIx64 "_control.romfs", ctx->header.title_id);
     printf("Extracting RomFS to %s\n", control_romfs_path.char_path);
 
+    // Ensure the secure directory exists before writing the RomFS file
+    os_makedir(ctx->tool_ctx->settings.secure_dir_path.os_path);
+
     // Extract control.nacp
 
     FILE *fl;
@@ -981,7 +984,7 @@ void nca_decrypt_key_area(nca_ctx_t *ctx)
     free_aes_ctx(aes_ctx);
 }
 
-/* Decrypt NCA header. */
+/* Decrypt NCA header with fallback to try all available header keys. */
 int nca_decrypt_header(nca_ctx_t *ctx)
 {
     fseeko64(ctx->file, 0, SEEK_SET);
@@ -993,22 +996,84 @@ int nca_decrypt_header(nca_ctx_t *ctx)
     ctx->is_decrypted = 0;
 
     nca_header_t dec_header;
+    nca_header_t best_header;
+    unsigned char best_score = 0;
+    int found = 0;
 
-    aes_ctx_t *hdr_aes_ctx = new_aes_ctx(ctx->tool_ctx->settings.keyset.header_key, 32, AES_MODE_XTS);
-    aes_xts_decrypt(hdr_aes_ctx, &dec_header, &ctx->header, 0x400, 0, 0x200);
+    /* Collect candidate header keys: raw key + one per key generation */
+    unsigned char candidate_keys[0x21][0x20];
+    int num_candidates = 0;
 
-    if (dec_header.magic == MAGIC_NCA3)
+    /* First candidate: the raw header_key from prod.keys */
+    memcpy(candidate_keys[num_candidates++], ctx->tool_ctx->settings.keyset.header_key, 0x20);
+
+    /* Additional candidates: derive header_key for each master key generation */
+    nca_keyset_t *keyset = &ctx->tool_ctx->settings.keyset;
+    unsigned char zeroes[0x10];
+    memset(zeroes, 0, 0x10);
+
+    for (unsigned int i = 0; i < 0x20; i++)
     {
+        if (memcmp(keyset->master_keys[i], zeroes, 0x10) == 0)
+            continue;
+        if (memcmp(keyset->header_kek_source, zeroes, 0x10) == 0)
+            continue;
+        if (memcmp(keyset->header_key_source, zeroes, 0x20) == 0)
+            continue;
+
+        unsigned char header_kek[0x10];
+        unsigned char derived_header_key[0x20];
+        generate_kek(header_kek, keyset->header_kek_source, keyset->master_keys[i], keyset->aes_kek_generation_source, keyset->aes_key_generation_source);
+        aes_ctx_t *header_ctx = new_aes_ctx(header_kek, 0x10, AES_MODE_ECB);
+        aes_decrypt(header_ctx, derived_header_key, keyset->header_key_source, 0x20);
+        free_aes_ctx(header_ctx);
+
+        if (memcmp(derived_header_key, zeroes, 0x20) != 0)
+        {
+            memcpy(candidate_keys[num_candidates++], derived_header_key, 0x20);
+        }
+    }
+
+    /* Try each candidate key and score by how many valid fields the decrypted header has */
+    for (int k = 0; k < num_candidates; k++)
+    {
+        aes_ctx_t *hdr_aes_ctx = new_aes_ctx(candidate_keys[k], 32, AES_MODE_XTS);
+        aes_xts_decrypt(hdr_aes_ctx, &dec_header, &ctx->header, 0x400, 0, 0x200);
+        free_aes_ctx(hdr_aes_ctx);
+
+        if (dec_header.magic == MAGIC_NCA3)
+        {
+            /* Score: check if crypto_type and kaek_ind look reasonable */
+            unsigned char score = 1;
+            if (dec_header.crypto_type < 0x20) score++;
+            if (dec_header.kaek_ind < 3) score++;
+            if (dec_header.title_id != 0) score++;
+            if (dec_header.rights_id[0] != 0 || dec_header.rights_id[1] != 0) score++;
+
+            if (score > best_score)
+            {
+                best_score = score;
+                best_header = dec_header;
+                memcpy(keyset->header_key, candidate_keys[k], 0x20);
+                found = 1;
+            }
+        }
+    }
+
+    if (found)
+    {
+        aes_ctx_t *hdr_aes_ctx = new_aes_ctx(keyset->header_key, 32, AES_MODE_XTS);
+        aes_xts_decrypt(hdr_aes_ctx, &best_header, &ctx->header, 0xC00, 0, 0x200);
+        ctx->header = best_header;
         ctx->format_version = NCAVERSION_NCA3;
-        aes_xts_decrypt(hdr_aes_ctx, &dec_header, &ctx->header, 0xC00, 0, 0x200);
-        ctx->header = dec_header;
+        free_aes_ctx(hdr_aes_ctx);
     }
     else
     {
-        fprintf(stderr, "Invalid NCA magic!\n");
+        fprintf(stderr, "Invalid NCA magic! Tried %d candidate keys.\n", num_candidates);
         exit(EXIT_FAILURE);
     }
-    free_aes_ctx(hdr_aes_ctx);
+
     return ctx->format_version != NCAVERSION_UNKNOWN;
 }
 

@@ -20,6 +20,7 @@ typedef struct {
     unsigned char keyblob_key_sources[0x20][0x10];       /* Seeds for keyblob keys. */
     unsigned char keyblob_mac_key_source[0x10];          /* Seed for keyblob MAC key derivation. */
     unsigned char tsec_root_key[0x10];                   /* Seed for master kek decryption, from TSEC firmware on 6.2.0+. */
+    unsigned char tsec_root_keys[0x20][0x10];            /* Seeds for master kek decryption, per key generation. */
     unsigned char master_kek_sources[0x20][0x10];        /* Seeds for firmware master keks. */
     unsigned char master_keks[0x20][0x10];               /* Firmware master keks, stored in keyblob prior to 6.2.0. */
     unsigned char master_key_source[0x10];               /* Seed for master key derivation. */

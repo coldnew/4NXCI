@@ -490,7 +490,7 @@ const nca_keyset_t nca_keys_retail = {
      0x09, 0x27, 0x96, 0x3F, 0x07, 0x9A, 0x91, 0xF7, 0x16, 0xBF, 0xC6, 0x3A, 0x82, 0x5A, 0x4B, 0xCF,
      0x49, 0x50, 0x95, 0x8C, 0x55, 0x80, 0x7E, 0x39, 0xB1, 0x48, 0x05, 0x1E, 0x21, 0xC7, 0x24, 0x4F}};
 
-static void generate_kek(unsigned char *dst, const unsigned char *src, const unsigned char *master_key, const unsigned char *kek_seed, const unsigned char *key_seed)
+void generate_kek(unsigned char *dst, const unsigned char *src, const unsigned char *master_key, const unsigned char *kek_seed, const unsigned char *key_seed)
 {
     unsigned char kek[0x10];
     unsigned char src_kek[0x10];
@@ -589,7 +589,7 @@ void pki_derive_keys(nca_keyset_t *keyset)
     for (unsigned int i = 0x6; i < 0x20; i++)
     {
         /* Do new keygen for 6.2.0+. */
-        if (memcmp(keyset->tsec_root_key, zeroes, 0x10) == 0)
+        if (memcmp(keyset->tsec_root_keys[i], zeroes, 0x10) == 0)
         {
             continue;
         }
@@ -598,7 +598,7 @@ void pki_derive_keys(nca_keyset_t *keyset)
             continue;
         }
 
-        aes_ctx_t *tsec_root_ctx = new_aes_ctx(keyset->tsec_root_key, 0x10, AES_MODE_ECB);
+        aes_ctx_t *tsec_root_ctx = new_aes_ctx(keyset->tsec_root_keys[i], 0x10, AES_MODE_ECB);
         aes_decrypt(tsec_root_ctx, keyset->master_keks[i], keyset->master_kek_sources[i], 0x10);
         free_aes_ctx(tsec_root_ctx);
     }
@@ -655,14 +655,22 @@ void pki_derive_keys(nca_keyset_t *keyset)
             aes_decrypt(master_ctx, &keyset->package2_keys[i], keyset->package2_key_source, 0x10);
         }
 
-        /* Derive Header Key */
-        if (i == 0 && memcmp(keyset->header_kek_source, zeroes, 0x10) != 0 && memcmp(keyset->header_key_source, zeroes, 0x20) != 0)
+        /* Derive Header Key for all key generations (only if master key exists) */
+        if (memcmp(keyset->master_keys[i], zeroes, 0x10) != 0 &&
+            memcmp(keyset->header_kek_source, zeroes, 0x10) != 0 &&
+            memcmp(keyset->header_key_source, zeroes, 0x20) != 0)
         {
             unsigned char header_kek[0x10];
+            unsigned char derived_header_key[0x20];
             generate_kek(header_kek, keyset->header_kek_source, keyset->master_keys[i], keyset->aes_kek_generation_source, keyset->aes_key_generation_source);
             aes_ctx_t *header_ctx = new_aes_ctx(header_kek, 0x10, AES_MODE_ECB);
-            aes_decrypt(header_ctx, keyset->header_key, keyset->header_key_source, 0x20);
+            aes_decrypt(header_ctx, derived_header_key, keyset->header_key_source, 0x20);
             free_aes_ctx(header_ctx);
+            /* Only overwrite if derived key is non-zero (valid) */
+            if (memcmp(derived_header_key, zeroes, 0x20) != 0)
+            {
+                memcpy(keyset->header_key, derived_header_key, 0x20);
+            }
         }
 
         /* Derive SD Card Key */
@@ -689,7 +697,7 @@ void pki_derive_keys(nca_keyset_t *keyset)
 
 void pki_initialize_keyset(nca_keyset_t *keyset)
 {
-
+    memset(keyset, 0, sizeof(*keyset));
     memcpy(keyset, &nca_keys_retail, sizeof(*keyset));
     pki_derive_keys(keyset);
 }
