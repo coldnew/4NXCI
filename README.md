@@ -2,7 +2,7 @@
 
 This project is based on the work of [4NXCI](https://github.com/tiliarou/4NXCI) by The-4n.
 
-A modernized version for Visual Studio 2026 with performance improvements and updated dependencies.
+A modernized version for macOS (Apple Silicon / Intel) with performance improvements and updated dependencies.
 
 ## Building on macOS
 
@@ -41,7 +41,7 @@ All NSP files are automatically organized into a folder named after the game tit
 **Example folder structure:**
 
 ```
-4nxci.exe -c "The Legend of Zelda BOTW.xci"
+./4nxci -c "The Legend of Zelda BOTW.xci"
 
 The Legend of Zelda - Breath of the Wild/
 ├── The Legend of Zelda - Breath of the Wild[01007EF00011E000][BASE].nsp
@@ -59,17 +59,17 @@ The Legend of Zelda - Breath of the Wild/
 
 **Recommended usage (2026):**
 ```
-.\4nxci.exe -c <path_to_file.xci>
+./4nxci -c <path_to_file.xci>
 ```
 Add `-d` to delete the source XCI file after conversion:
 ```
-.\4nxci.exe -c -d <path_to_file.xci>
+./4nxci -c -d <path_to_file.xci>
 ```
 
 **Rename existing NSP/NSZ files:**
 ```
-.\4nxci.exe -r <path_to_file.nsp>
-.\4nxci.exe -r <path_to_file.nsz>
+./4nxci -r <path_to_file.nsp>
+./4nxci -r <path_to_file.nsz>
 ```
 This will rename the NSP or NSZ file to match the naming format based on its internal metadata (Title ID, version, type). The original extension is preserved in the output filename.
 
@@ -85,12 +85,12 @@ The Title ID is used as the name instead:
 ```
 010044901C5C2000[010044901C5C2000][BASE].nsp
 ```
-**Full command syntax (LEGACY/DEPRECATED):**
+**Full command syntax:**
 ```
-.\4nxci.exe [options...] <path_to_file.xci>
+./4nxci [options...] <path_to_file.xci>
 
 Options:
--k, --keyset             Set keyset filepath, default filepath is .\keys.dat
+-k, --keyset             Set keyset filepath, default filepath is ./keys.dat
 -h, --help               Display usage
 -t, --tempdir            Set temporary directory path
 -o, --outdir             Set output directory path
